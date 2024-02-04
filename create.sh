@@ -21,8 +21,8 @@ read folder_location
 color_echo "yellow" "Enter the PHP version (e.g., 82):"
 read php_version
 
-# Create Apache configuration file
-config_file="/etc/httpd/sites-available/$domain_name.conf"
+# Create Apache configuration file `/etc/httpd/sites-available/$domain_name.conf`
+config_file="$domain_name.conf"
 cat <<EOL > "$config_file"
 <VirtualHost *:80>
     ServerAdmin admin@$domain_name
