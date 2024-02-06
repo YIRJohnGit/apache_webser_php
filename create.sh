@@ -35,7 +35,7 @@ if [ "$php_confirmation" == "y" ]; then
     read php_version
 fi
 
-        echo "<VirtualHost *:80>" > 
+        echo "<VirtualHost *:80>" > "$config_file"
         echo "    ServerAdmin admin@$domain_name" > "$config_file"
         echo "    ServerName $domain_name" >> "$config_file"
         echo "    ServerAlias www.$domain_name" >> "$config_file"
