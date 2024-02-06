@@ -48,6 +48,7 @@ fi
         echo "        AllowOverride All" >> "$config_file"
         echo "        Require all granted" >> "$config_file"
         echo "    </Directory>" >> "$config_file"
+        echo "" >> "$config_file"
         if [ "$php_confirmation" == "y" ]; then
             echo "    ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:90$php_version$folder_location/public_html/\$1" >> "$config_file"
         fi
