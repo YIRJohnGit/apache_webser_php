@@ -43,9 +43,19 @@ create_apache_config()
         echo "        Require all granted"
         echo "    </Directory>"
         echo ""
+        if [ "$php_confirmation" == "y" ]; then
+            echo "    ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:90$php_version$folder_location/public_html/\$1"
+        fi
+        echo ""
         if [ "$ssl_config" == "y" ]; then
             echo "    Redirect permanent / https://$domain_name/"
         fi
+
+        echo ""
+        echo "    ErrorLog $folder_location/logs/error.log"
+        echo "    CustomLog $folder_location/logs/access.log combined"
+        echo ""
+        
         echo "</VirtualHost>"
     } > "$http_config"
 
@@ -71,6 +81,15 @@ create_apache_config()
         echo "        AllowOverride All"
         echo "        Require all granted"
         echo "    </Directory>"
+        if [ "$php_confirmation" == "y" ]; then
+            echo "    ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:90$php_version$folder_location/public_html/\$1"
+        fi
+        
+        echo ""
+        echo "    ErrorLog $folder_location/logs/error.log"
+        echo "    CustomLog $folder_location/logs/access.log combined"
+        echo ""
+    
         echo "</VirtualHost>"
     } > "$https_config"
     fi
