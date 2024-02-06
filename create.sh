@@ -61,4 +61,4 @@ fi
 
     # Display success message
     color_echo "green" "Apache configuration file created successfully at: $config_file"
-fi
+
