@@ -19,7 +19,7 @@ color_echo "yellow" "Enter the folder location (e.g., /home/apimydomaincom):"
 read folder_location
 
 # Create Apache configuration file `/etc/httpd/sites-available/$domain_name.conf` if it doesn't exist
-config_file="/etc/httpd/sites-available/$domain_name.conf"
+config_file="./$domain_name.conf"
 
 if [ -e "$config_file" ]; then
     color_echo "red" "Error: Configuration file already exists. Aborting."
