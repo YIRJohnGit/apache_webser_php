@@ -18,34 +18,46 @@ read domain_name
 color_echo "yellow" "Enter the folder location (e.g., /home/apimydomaincom):"
 read folder_location
 
-color_echo "yellow" "Enter the PHP version (e.g., 82):"
-read php_version
+# Create Apache configuration file `/etc/httpd/sites-available/$domain_name.conf` if it doesn't exist
+config_file="/etc/httpd/sites-available/$domain_name.conf"
 
-# Create Apache configuration file `/etc/httpd/sites-available/$domain_name.conf`
-config_file="$domain_name.conf"
-cat <<EOL > "$config_file"
-<VirtualHost *:80>
-    ServerAdmin admin@$domain_name
-    ServerName $domain_name
-    ServerAlias www.$domain_name
+if [ -e "$config_file" ]; then
+    color_echo "red" "Error: Configuration file already exists. Aborting."
+else
+    {
+        # Check if PHP is required
+        color_echo "yellow" "Do you need PHP support for this domain? (y/n):"
+        read php_confirmation
 
-    DocumentRoot $folder_location/public_html
-    DirectoryIndex index.htm index.html index.shtml index.php index.phtml
+        if [ "$php_confirmation" == "y" ]; then
+            color_echo "yellow" "Enter the PHP version (e.g.,72 / 74 / 80 / 82):"
+            read php_version
+        fi
 
-    <Directory "$folder_location/public_html">
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
+        echo "<VirtualHost *:80>"
+        echo "    ServerAdmin admin@$domain_name"
+        echo "    ServerName $domain_name"
+        echo "    ServerAlias www.$domain_name"
+        echo ""
+        echo "    DocumentRoot $folder_location/public_html"
+        echo "    DirectoryIndex index.htm index.html index.shtml index.php index.phtml"
+        echo ""
+        echo "    <Directory \"$folder_location/public_html\">"
+        echo "        Options Indexes FollowSymLinks"
+        echo "        AllowOverride All"
+        echo "        Require all granted"
+        echo "    </Directory>"
+        if [ "$php_confirmation" == "y" ]; then
+            echo "    ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:90$php_version$folder_location/public_html/\$1"
+        fi
+        echo ""
+        echo "    ErrorLog $folder_location/logs/error.log"
+        echo "    CustomLog $folder_location/logs/access.log combined"
+        echo ""
+        echo "    Redirect permanent / https://$domain_name/"
+        echo "</VirtualHost>"
+    } > "$config_file"
 
-    ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:90$php_version$folder_location/public_html/\$1
-
-    ErrorLog $folder_location/logs/error.log
-    CustomLog $folder_location/logs/access.log combined
-
-    Redirect permanent / https://$domain_name/
-</VirtualHost>
-EOL
-
-# Display success message
-color_echo "green" "Apache configuration file created successfully at: $config_file"
+    # Display success message
+    color_echo "green" "Apache configuration file created successfully at: $config_file"
+fi
