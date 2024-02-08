@@ -124,5 +124,5 @@ create_apache_config "$domain_name" "$folder_location" "$php_version" "$ssl_conf
 color_echo "yellow" "scp $domain_name* rza-main:/etc/httpd/sites-available/"
 color_echo "yellow" "sudo httpd -t"
 color_echo "yellow" "sudo systemctl restart httpd"
-color_echo "yellow" "sudo systemctl restart php82-php-fpm"
-color_echo "yellow" "sudo systemctl status php82-php-fpm"
+color_echo "yellow" "sudo systemctl restart php$php_version-php-fpm"
+color_echo "yellow" "sudo systemctl status php$php_version-php-fpm"
