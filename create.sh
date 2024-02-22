@@ -22,7 +22,7 @@ create_apache_config()
     local https_config="$domain_name-le-ssl.conf"
 
     if [ -e "$http_config" ]; then
-        color_echo "red" "Error: Configuration file for HTTP already exists. Aborting."
+        color_echo "red" "Error: Configuration file for HTTP already exists. Aborting. ($http_config)"
         return 1
     fi
 
