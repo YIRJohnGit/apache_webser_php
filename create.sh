@@ -140,4 +140,36 @@ sudo cp /etc/httpd/sites-available/${domain_name}-le-ssl.conf ${BACKUP_DATE_TIME
 sudo scp ${domain_name}* /etc/httpd/sites-available/
 sudo mv ${domain_name}.conf ${BACKUP_DATE_TIME}_${domain_name}.conf
 sudo mv ${domain_name}-le-ssl.conf ${BACKUP_DATE_TIME}_${domain_name}-le-ssl.conf
-sudo httpd -t
+
+# Check httpd configuration
+if sudo httpd -t; then
+    color_echo "green" "httpd configuration test successful"
+else
+    color_echo "red"  "httpd configuration test failed, exiting..."
+    exit 1
+fi
+
+# Restart httpd
+if sudo systemctl restart httpd; then
+    color_echo "green"  "httpd restarted successfully"
+else
+    color_echo "red" "httpd restart failed, exiting..."
+    exit 1
+fi
+
+# Restart php-fpm
+if sudo systemctl restart php${php_version}-php-fpm; then
+    color_echo "green"  "php-fpm restarted successfully"
+else
+    color_echo "red"  "php-fpm restart failed, exiting..."
+    exit 1
+fi
+
+# Check php-fpm status
+if sudo systemctl status php${php_version}-php-fpm; then
+    color_echo "green"  "php-fpm status check successful"
+else    
+    color_echo "red" "php-fpm status check failed, exiting..."
+    exit 1
+fi
+
