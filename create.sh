@@ -98,6 +98,9 @@ create_apache_config()
 }
 
 # Input variables
+color_echo "yellow" "...for configuration apache web server with / without PHP"
+
+# Input variables
 color_echo "yellow" "Enter the domain name (e.g., api.mydomain.com):"
 read domain_name
 
@@ -121,6 +124,7 @@ read ssl_configuration_setup
 # Create Apache configuration
 create_apache_config "$domain_name" "$folder_location" "$php_version" "$ssl_configuration_setup"
 
+cp "bak_$domain_name* .
 color_echo "yellow" "scp $domain_name* /etc/httpd/sites-available/"
 color_echo "yellow" "sudo httpd -t"
 color_echo "yellow" "sudo systemctl restart httpd"
