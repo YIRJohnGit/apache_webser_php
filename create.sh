@@ -138,3 +138,6 @@ color_echo "yellow" "sudo systemctl status php${php_version}-php-fpm"
 sudo cp /etc/httpd/sites-available/${domain_name}.conf ${BACKUP_DATE_TIME}_${domain_name}.conf
 sudo cp /etc/httpd/sites-available/${domain_name}-le-ssl.conf ${BACKUP_DATE_TIME}_${domain_name}-le-ssl.conf
 sudo scp ${domain_name}* /etc/httpd/sites-available/
+sudo mv ${domain_name}.conf ${BACKUP_DATE_TIME}_${domain_name}.conf
+sudo mv ${domain_name}-le-ssl.conf ${BACKUP_DATE_TIME}_${domain_name}-le-ssl.conf
+sudo httpd -t
