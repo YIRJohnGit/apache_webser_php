@@ -124,11 +124,16 @@ read ssl_configuration_setup
 # Create Apache configuration
 create_apache_config "$domain_name" "$folder_location" "$php_version" "$ssl_configuration_setup"
 
-color_echo "yellow" "sudo cp /etc/httpd/sites-available/${domain_name}* ./bak_${domain_name}*"
+BACKUP_DATE_TIME=$(date +%Y%m%d_%H%M%S_%3N)
+
+color_echo "yellow" "sudo cp /etc/httpd/sites-available/${domain_name}.conf ${BACKUP_DATE_TIME}_${domain_name}.conf"
+color_echo "yellow" "sudo cp /etc/httpd/sites-available/${domain_name}-le-ssl.conf ${BACKUP_DATE_TIME}_${domain_name}-le-ssl.conf"
+
 color_echo "yellow" "scp ${domain_name}* /etc/httpd/sites-available/"
 color_echo "yellow" "sudo httpd -t"
 color_echo "yellow" "sudo systemctl restart httpd"
 color_echo "yellow" "sudo systemctl restart php${php_version}-php-fpm"
 color_echo "yellow" "sudo systemctl status php${php_version}-php-fpm"
 
-sudo cp "/etc/httpd/sites-available/${domain_name}"* "./bak_${domain_name}"*
+sudo cp /etc/httpd/sites-available/${domain_name}.conf ${BACKUP_DATE_TIME}_${domain_name}.conf
+sudo cp /etc/httpd/sites-available/${domain_name}-le-ssl.conf ${BACKUP_DATE_TIME}_${domain_name}-le-ssl.conf
