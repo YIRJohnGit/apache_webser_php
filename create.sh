@@ -144,6 +144,7 @@ sudo mv ${domain_name}-le-ssl.conf ${BACKUP_DATE_TIME}_${domain_name}-le-ssl.con
 # Check httpd configuration
 if sudo httpd -t; then
     color_echo "green" "httpd configuration test successful"
+    color_echo "yellow"  "please wait restarting httpd..."
 else
     color_echo "red"  "httpd configuration test failed, exiting..."
     exit 1
